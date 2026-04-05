@@ -16,6 +16,6 @@ jobs:
           username: ${{secrets.MAIL_USERNAME}}
           password: ${{secrets.MAIL_PASSWORD}}
           subject: Daily Python Learning Progress Report
-          to: your_email@example.com, brother_email@example.com
-          from: GitHub Actions Bot <your_email@example.com>
+          to: adityakumarpattnaik143@gmail.com, pattnaikashibad4@gmail.com
+          from: GitHub Actions Bot <adityakumarpattnaik143@gmail.com>
           body: "The daily automated checks have run! Please check the GitHub repository to see the latest code pushes, successful runs, and if any code needs fixing."
