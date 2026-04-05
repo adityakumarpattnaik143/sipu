@@ -46,6 +46,6 @@ jobs:
           username: ${{secrets.MAIL_USERNAME}}
           password: ${{secrets.MAIL_PASSWORD}}
           subject: Run Python Code and Tests - Failed
-          to: adityakumarpattnaik143@gmail.com, pattnaikashibad4@gmail.com
+          to: adityakumarpattnaik143@gmail.com, pattnaikashirbad4@gmail.com
           from: GitHub Actions Bot <adityakumarpattnaik143@gmail.com>
           body: "The automated tests failed. Please check the GitHub Actions logs to fix the issues."
