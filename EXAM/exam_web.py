@@ -47,9 +47,9 @@ HTML_TEMPLATE = """
         .controls { padding: 5px 0 15px 0; display: flex; justify-content: space-between; align-items: center; }
         button { padding: 5px 15px; font-size: 14px; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px; }
         button:hover { background-color: #0056b3; }
-        .output-box { min-height: 400px; max-height: 600px; resize: vertical; background: #000; color: #ddd; font-family: monospace; padding: 10px; overflow-y: auto; border: 1px solid #444; margin-top: 10px; white-space: pre-wrap; display: none; }
+        .output-box { height: 150px; background: #000; color: #ddd; font-family: monospace; padding: 10px; overflow-y: auto; border: 1px solid #444; margin-top: 10px; white-space: pre-wrap; display: none; }
         .output-box.active { display: block; }
-        .task-container { display: flex; flex-direction: column; flex: 0 0 auto; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 15px; }
+        .task-container { display: flex; flex-direction: column; flex: 1; min-height: 200px; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 15px; }
         .task-container h4 { margin: 5px 0; }
         marquee { background-color: #ffeb3b; color: #000; font-weight: bold; padding: 5px; border-bottom: 1px solid #ccc; position: absolute; top: 0; left: 0; width: 100%; z-index: 2; box-sizing: border-box; }
         .panel-container { display: flex; width: 100%; height: calc(100vh - 32px); margin-top: 32px; }
