@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Exam Live Visualisation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+        }
+        .left-panel {
+            width: 40%;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .right-panel {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        textarea {
+            flex: 1;
+            font-family: monospace;
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+        .button-container {
+            margin-top: 10px;
+            text-align: right;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results-container {
+            margin-top: 20px;
+            height: 30%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 10px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: #f44336;
+        }
+        .success {
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            {{ questions | safe }}
+        </div>
+        <div class="right-panel">
+            <div class="editor-container">
+                <h3>Code Editor (exam_tasks.py)</h3>
+                <textarea id="code-editor">{{ code }}</textarea>
+                <div class="button-container">
+                    <button id="run-btn">Run Tests</button>
+                </div>
+            </div>
+            <div class="results-container" id="results">
+                Test results will appear here...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('run-btn').addEventListener('click', async () => {
+            const code = document.getElementById('code-editor').value;
+            const resultsDiv = document.getElementById('results');
+            const runBtn = document.getElementById('run-btn');
+
+            runBtn.disabled = true;
+            runBtn.innerText = "Running...";
+            resultsDiv.innerText = "Running tests...\n";
+
+            try {
+                const response = await fetch('/run_tests', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code: code })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.stdout) {
+                        resultsDiv.innerHTML = escapeHtml(data.stdout);
+                    }
+                    if (data.stderr) {
+                        resultsDiv.innerHTML += '<span class="error">' + escapeHtml(data.stderr) + '</span>';
+                    }
+                } else {
+                    resultsDiv.innerHTML = '<span class="error">Error: ' + escapeHtml(data.error) + '</span>';
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = '<span class="error">Network error: ' + escapeHtml(error.toString()) + '</span>';
+            } finally {
+                runBtn.disabled = false;
+                runBtn.innerText = "Run Tests";
+            }
+        });
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
