@@ -1,5 +1,11 @@
 name: Run Python Code and Tests
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,3 +23,29 @@ jobs:
       - name: Run Python Tests
         run: |
           pytest
+      - name: Send mail on success
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          subject: Run Python Code and Tests - Success
+          to: adityakumarpattnaik143@gmail.com, pattnaikashibad4@gmail.com
+          from: GitHub Actions Bot <adityakumarpattnaik143@gmail.com>
+          body: "The automated tests passed successfully! The latest code has been verified."
+      - name: Send mail on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          subject: Run Python Code and Tests - Failed
+          to: adityakumarpattnaik143@gmail.com, pattnaikashibad4@gmail.com
+          from: GitHub Actions Bot <adityakumarpattnaik143@gmail.com>
+          body: "The automated tests failed. Please check the GitHub Actions logs to fix the issues."
