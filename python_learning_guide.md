@@ -1,359 +1,349 @@
-# Python Learning Guide
+# Comprehensive Python Learning Guide
 **Curated by ADITYA KUMAR PATTNAIK**
 
-Welcome to your Python learning journey! This guide is designed to take you from a complete beginner (zero) to an advanced Python programmer. It provides step-by-step instructions, clear definitions, examples, and sample test cases.
+Welcome to the ultimate Python learning journey! This guide takes you from absolute beginner (Level 0) to advanced professional. It includes detailed theory, practical examples, and test cases for each topic.
 
 ---
 
-## Setup: Running Python on Your Local Machine
+## Basic Knowledge Transfer (KT) & Setup
 
-Before you can start writing code, you need to set up Python on your local computer.
+### Environment Setup: Running Python on Your Local Machine
+1. **Install Python:** Go to [python.org/downloads](https://www.python.org/downloads/) and install the latest version. **Windows Users:** Check the box "Add Python to PATH" during installation.
+2. **Verify Installation:** Open a terminal and run `python --version` (or `python3 --version`).
+3. **IDE:** Download **Visual Studio Code (VS Code)** and install the "Python" extension.
 
-### Step 1: Install Python
-1. Go to the official Python website: [python.org/downloads](https://www.python.org/downloads/)
-2. Download the latest version for your operating system (Windows, macOS, or Linux).
-3. **Important for Windows Users:** During the installation process, check the box that says **"Add Python to PATH"**. This allows you to run Python from any command prompt.
+### Repository Workflow & Testing
+All your code should go inside the `daily_codes/` directory.
 
-### Step 2: Verify Installation
-1. Open your terminal or command prompt.
-2. Type `python --version` (or `python3 --version` on macOS/Linux) and press Enter.
-3. You should see the version number printed (e.g., `Python 3.12.3`).
-
-### Step 3: Choose an IDE (Code Editor)
-You need a text editor to write your code. We recommend **Visual Studio Code (VS Code)**.
-1. Download it from [code.visualstudio.com](https://code.visualstudio.com/).
-2. Install the **Python Extension** inside VS Code (search for "Python" by Microsoft in the Extensions tab).
+1. **Write Code:** Create a file like `daily_codes/hello.py`.
+2. **Write Tests:** Create a test file like `daily_codes/test_hello.py` to test your functions.
+3. **Run Code:** Use `python daily_codes/hello.py`.
+4. **Run Tests:** We use `pytest`. Install it using `pip install pytest`, then run:
+   ```bash
+   pytest daily_codes/
+   ```
 
 ---
 
-## Basic Knowledge Transfer (KT): Working with this Repository
+## 1. Basics & Fundamentals (Level 0)
 
-Now that Python is installed, here is how you will write code and test it locally.
+### Theory
+- **Syntax & Structure:** Python uses indentation (spaces/tabs) instead of `{}`.
+- **Comments:** Use `#` for single-line and `"""` for multi-line.
+- **Variables:** Storing data (e.g., `x = 5`). Use `snake_case` for naming.
+- **Types:** `int`, `float`, `str`, `bool`, `None`. Use `type(x)` to check.
+- **Type Casting:** `int("5")` converts string to integer.
+- **I/O:** `print()` for output, `input()` for taking user input.
+- **Operators:** Arithmetic (`+`, `-`, `*`, `/`, `//`, `%`, `**`), Comparison (`==`, `!=`), Logical (`and`, `or`, `not`).
 
-### 1. Repository Structure
-All your daily code practice should be stored in the `daily_codes/` directory of this repository.
-
-### 2. Writing Python Code
-- Create a Python file for the concept you are learning. For example, `daily_codes/variables.py`.
-- Write your code inside this file using functions so it can be tested easily.
-
-### 3. Writing Test Cases
-- We use a testing tool called `pytest` to verify our code works.
-- For every Python file you create, you should create a corresponding test file in the *same directory* (`daily_codes/`).
-- The test file name **must** start with `test_`. For example, `test_variables.py`.
-
-### 4. Example KT Workflow
-**Create your code file (`daily_codes/hello.py`):**
+### Example (`daily_codes/fundamentals.py`)
 ```python
-# daily_codes/hello.py
-def say_hello(name):
-    return f"Hello, {name}!"
+def check_type_and_math(val1_str, val2_int):
+    val1_int = int(val1_str) # Explicit casting
+    return val1_int ** val2_int # Exponentiation
 ```
 
-**Create your test file (`daily_codes/test_hello.py`):**
+### Test (`daily_codes/test_fundamentals.py`)
 ```python
-# daily_codes/test_hello.py
-from hello import say_hello
+from fundamentals import check_type_and_math
 
-def test_say_hello():
-    assert say_hello("Aditya") == "Hello, Aditya!"
-```
-
-**Running your Python file directly:**
-Open your terminal, navigate to the `daily_codes/` directory, and run:
-```bash
-python hello.py
-```
-*(Note: Use `python3 hello.py` if you are on macOS or Linux).*
-
-**Running your tests (Important!):**
-We use a testing framework called `pytest` to make sure our code works.
-First, ensure it is installed:
-```bash
-pip install pytest
-```
-Then, navigate to the repository root and run all tests:
-```bash
-pytest daily_codes/
+def test_check_type_and_math():
+    assert check_type_and_math("2", 3) == 8 # 2^3
 ```
 
 ---
 
-## Part 1: Python Basics
+## 2. Control Flow
 
-### 0. What is Python?
-**Definition:** Python is a high-level, interpreted programming language known for its readability and simplicity. It uses indentation (spaces) to define code blocks instead of curly braces `{}`.
+### Theory
+- **Conditionals:** `if`, `elif`, `else` to make decisions.
+- **Ternary:** `x if condition else y`.
+- **Loops:** `for` (iterate sequences/range), `while` (condition-based).
+- **Control:** `break` (exit loop), `continue` (skip iteration), `pass` (do nothing).
 
-**Comments in Python:**
-- Use the `#` symbol for single-line comments. These are ignored by the computer but help humans read the code.
-- Example: `# This is a comment`
-
-**Indentation:**
-Python is very strict about spaces. You must use 4 spaces (or 1 Tab) for anything inside a function, loop, or condition.
+### Example (`daily_codes/control.py`)
 ```python
-def my_function():
-    # Correct indentation!
-    print("Hello")
-```
-
-### 1. Variables and Data Types
-**Definition:** Variables are containers for storing data values. Python has various data types like Integers (`int`), Floats (`float`), Strings (`str`), and Booleans (`bool`).
-
-**Example Code (`daily_codes/basics.py`):**
-```python
-def add_numbers(a, b):
-    return a + b
-
-def greet_user(name):
-    return "Welcome, " + name
-```
-
-**Test Case (`daily_codes/test_basics.py`):**
-```python
-from basics import add_numbers, greet_user
-
-def test_add_numbers():
-    assert add_numbers(5, 3) == 8 # Output should be 8
-
-def test_greet_user():
-    assert greet_user("Brother") == "Welcome, Brother" # Output should be "Welcome, Brother"
-```
-
-### 2. Control Flow (If/Else Statements)
-**Definition:** Control flow allows your program to make decisions and execute different code blocks based on conditions.
-
-**Example Code (`daily_codes/control_flow.py`):**
-```python
-def check_even_odd(number):
-    if number % 2 == 0:
-        return "Even"
-    else:
-        return "Odd"
-```
-
-**Test Case (`daily_codes/test_control_flow.py`):**
-```python
-from control_flow import check_even_odd
-
-def test_check_even_odd():
-    assert check_even_odd(4) == "Even"
-    assert check_even_odd(7) == "Odd"
-```
-
-### 3. Loops (For and While)
-**Definition:** Loops are used for iterating over a sequence (like a list, tuple, dictionary, set, or string) or repeating an action while a condition is true.
-
-**Example Code (`daily_codes/loops.py`):**
-```python
-def sum_of_list(numbers):
+def sum_evens_up_to(limit):
     total = 0
-    for num in numbers:
-        total += num
+    for i in range(limit + 1):
+        if i % 2 != 0:
+            continue
+        total += i
     return total
 ```
 
-**Test Case (`daily_codes/test_loops.py`):**
+### Test (`daily_codes/test_control.py`)
 ```python
-from loops import sum_of_list
+from control import sum_evens_up_to
 
-def test_sum_of_list():
-    assert sum_of_list([1, 2, 3, 4]) == 10
+def test_sum_evens():
+    assert sum_evens_up_to(4) == 6 # 0 + 2 + 4
 ```
 
 ---
 
-## Part 2: Intermediate Python
+## 3. Built-in Data Structures
 
-### 3.5 Functions Deep Dive (`*args`, `**kwargs`, Scope)
-**Definition:**
-- **Functions:** Reusable blocks of code.
-- **Scope:** Variables created inside a function are "local" (cannot be seen outside).
-- **`*args`:** Allows you to pass a variable number of non-keyword arguments to a function.
-- **`**kwargs`:** Allows you to pass a variable number of keyword arguments (like a dictionary) to a function.
+### Theory
+- **Strings:** Immutable text. Methods: `.upper()`, `.split()`. Indexing `[0]`, Slicing `[start:stop]`.
+- **Lists:** Mutable, ordered `[]`. Methods: `.append()`, `.pop()`.
+- **Tuples:** Immutable, ordered `()`.
+- **Dictionaries:** Mutable, key-value pairs `{}`. Keys must be immutable.
+- **Sets:** Unordered, unique items `{}`. Supports math `.union()`.
 
-**Example Code (`daily_codes/functions_advanced.py`):**
+### Example (`daily_codes/data_structs.py`)
 ```python
-def variable_args_sum(*args):
-    # args is a tuple of all numbers passed
-    return sum(args)
-
-def print_user_info(**kwargs):
-    # kwargs is a dictionary
-    return kwargs.get("name", "Unknown")
+def manipulate_data(my_list):
+    my_list.append("new")
+    my_tuple = tuple(my_list)
+    my_set = set([1, 2, 2, 3])
+    my_dict = {"items": my_tuple, "unique_count": len(my_set)}
+    return my_dict
 ```
 
-**Test Case (`daily_codes/test_functions_advanced.py`):**
+### Test (`daily_codes/test_data_structs.py`)
 ```python
-from functions_advanced import variable_args_sum, print_user_info
+from data_structs import manipulate_data
 
-def test_variable_args():
-    assert variable_args_sum(1, 2, 3) == 6
-    assert variable_args_sum(10, 20) == 30
-
-def test_kwargs():
-    assert print_user_info(name="Aditya", age=25) == "Aditya"
-    assert print_user_info(age=25) == "Unknown"
+def test_manipulate_data():
+    res = manipulate_data([1])
+    assert res["items"] == (1, "new")
+    assert res["unique_count"] == 3
 ```
 
-### 4. Lists, Tuples, Dictionaries, and Sets
-**Definition:**
-- **Lists:** Ordered, mutable (changeable) collections of items, using square brackets `[]`.
-- **Tuples:** Ordered, **immutable** (cannot be changed) collections, using parentheses `()`. Much faster than lists.
-- **Dictionaries:** Key-value pairs, using curly braces `{}`.
-- **Sets:** Unordered collections of unique items, also using curly braces `{}` but without keys.
+---
 
-**Example Code (`daily_codes/data_structures.py`):**
+## 4. Functions & Scope
+
+### Theory
+- **Functions:** Reusable code blocks defined with `def`.
+- **Arguments:** Positional, Default (`x=10`), `*args` (Tuple of arguments), `**kwargs` (Dict of keywords).
+- **Scope (LEGB):** Local, Enclosing, Global, Built-in.
+- **Lambda:** Anonymous inline functions (e.g., `lambda x: x * 2`).
+- **Higher-Order:** `map()`, `filter()`.
+
+### Example (`daily_codes/funcs.py`)
 ```python
-def get_user_age(user_dict, name):
-    # Returns age if user exists, else returns "Not Found"
-    return user_dict.get(name, "Not Found")
-
-def get_unique_items(item_list):
-    # Converts list to set to remove duplicates, then back to list
-    return list(set(item_list))
+def apply_operation(operation_lambda, *args, **kwargs):
+    multiplier = kwargs.get("multiplier", 1)
+    return [operation_lambda(x) * multiplier for x in args]
 ```
 
-**Test Case (`daily_codes/test_data_structures.py`):**
+### Test (`daily_codes/test_funcs.py`)
 ```python
-from data_structures import get_user_age, get_unique_items
+from funcs import apply_operation
 
-def test_get_user_age():
-    users = {"Aditya": 25, "Brother": 20}
-    assert get_user_age(users, "Brother") == 20
-    assert get_user_age(users, "Unknown") == "Not Found"
-
-def test_get_unique_items():
-    assert sorted(get_unique_items([1, 2, 2, 3, 3, 4])) == [1, 2, 3, 4]
+def test_apply_operation():
+    res = apply_operation(lambda x: x + 1, 1, 2, 3, multiplier=2)
+    assert res == [4, 6, 8] # (1+1)*2, (2+1)*2, (3+1)*2
 ```
 
-### 5. Exception Handling
-**Definition:** Handling runtime errors smoothly using `try`, `except`, `finally` blocks so your program doesn't crash.
+---
 
-**Example Code (`daily_codes/exceptions.py`):**
+## 5. Comprehensions & Advanced Iteration
+
+### Theory
+- **Comprehensions:** Concise loops for Lists `[x for x in data]`, Dicts `{k:v for...}`, Sets `{x for...}`.
+- **Generator Expr:** `(x for...)` lazily evaluates, saving memory.
+- **Iteration Utils:** `zip()` combines lists, `enumerate()` gives index+value.
+
+### Example (`daily_codes/comprehensions.py`)
 ```python
-def safe_divide(a, b):
+def zip_to_dict(keys, values):
+    return {k: v for k, v in zip(keys, values) if v is not None}
+```
+
+### Test (`daily_codes/test_comprehensions.py`)
+```python
+from comprehensions import zip_to_dict
+
+def test_zip_to_dict():
+    res = zip_to_dict(['a', 'b'], [1, None])
+    assert res == {'a': 1}
+```
+
+---
+
+## 6. Modules, Packages & Virtual Environments
+
+### Theory
+- **Modules:** `.py` files. Import via `import math` or `from os import path`.
+- **Main Guard:** `if __name__ == "__main__":` runs code only when executed directly.
+- **Virtual Envs:** `python -m venv env` creates an isolated space for dependencies (`pip install`).
+
+*(Note: No test snippet for env setup, as it's a CLI workflow!)*
+
+---
+
+## 7. File Handling & I/O
+
+### Theory
+- **Basic:** `open(file, mode)` where modes are `r` (read), `w` (write), `a` (append).
+- **Context Managers:** `with open(...) as f:` auto-closes files.
+- **JSON:** `json.dump()` / `json.load()`.
+
+### Example (`daily_codes/files.py`)
+```python
+import json
+
+def write_and_read_json(filepath, data):
+    with open(filepath, 'w') as f:
+        json.dump(data, f)
+    with open(filepath, 'r') as f:
+        return json.load(f)
+```
+
+### Test (`daily_codes/test_files.py`)
+```python
+import os
+from files import write_and_read_json
+
+def test_json():
+    filepath = "temp.json"
+    res = write_and_read_json(filepath, {"name": "Aditya"})
+    assert res["name"] == "Aditya"
+    os.remove(filepath)
+```
+
+---
+
+## 8. Error & Exception Handling
+
+### Theory
+- **Handling:** `try`, `except Exception as e:`, `else`, `finally`.
+- **Raising:** `raise ValueError("Invalid")`.
+- **Assertions:** `assert x > 0, "x must be positive"`.
+
+### Example (`daily_codes/errors.py`)
+```python
+def strict_divide(a, b):
     try:
         return a / b
     except ZeroDivisionError:
-        return "Cannot divide by zero!"
+        return "Div/0"
 ```
 
-**Test Case (`daily_codes/test_exceptions.py`):**
+### Test (`daily_codes/test_errors.py`)
 ```python
-from exceptions import safe_divide
+from errors import strict_divide
 
-def test_safe_divide():
-    assert safe_divide(10, 2) == 5.0
-    assert safe_divide(10, 0) == "Cannot divide by zero!"
+def test_strict_divide():
+    assert strict_divide(10, 2) == 5.0
+    assert strict_divide(10, 0) == "Div/0"
 ```
 
 ---
 
-## Part 3: Advanced Python
+## 9. Object-Oriented Programming (OOP)
 
-### 5.5 Decorators
-**Definition:** A decorator is a function that takes another function and extends the behavior of the latter function without explicitly modifying it. It uses the `@` symbol.
+### Theory
+- **Classes/Objects:** Blueprints and instances.
+- **`__init__`:** Constructor. Uses `self`.
+- **Inheritance:** Child classes inherit from parent (`class Dog(Animal):`).
+- **Encapsulation:** Private variables `__var`.
+- **Polymorphism:** Method overriding.
+- **Magic Methods:** `__str__` for string representation.
 
-**Example Code (`daily_codes/decorators.py`):**
+### Example (`daily_codes/oop_demo.py`)
 ```python
-def make_uppercase(func):
-    def wrapper():
-        original_result = func()
-        return original_result.upper()
-    return wrapper
-
-@make_uppercase
-def say_hi():
-    return "hello there"
-```
-
-**Test Case (`daily_codes/test_decorators.py`):**
-```python
-from decorators import say_hi
-
-def test_say_hi():
-    assert say_hi() == "HELLO THERE"
-```
-
-### 5.6 Modules and Packages
-**Definition:**
-- **Module:** Any Python file `.py` containing Python code.
-- **Package:** A directory of Python modules containing an `__init__.py` file. This is how you organize large Python projects.
-
-You can import code from one file to another using `import` or `from ... import ...` (just like we do in our test files!).
-
-### 6. Object-Oriented Programming (OOP)
-**Definition:** A programming paradigm based on the concept of "objects", which can contain data and code (attributes and methods).
-
-**Example Code (`daily_codes/oop.py`):**
-```python
-class Dog:
+class Animal:
     def __init__(self, name):
         self.name = name
 
-    def bark(self):
-        return f"{self.name} says Woof!"
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} Barks"
 ```
 
-**Test Case (`daily_codes/test_oop.py`):**
+### Test (`daily_codes/test_oop_demo.py`)
 ```python
-from oop import Dog
+from oop_demo import Dog
 
-def test_dog_bark():
-    my_dog = Dog("Buddy")
-    assert my_dog.bark() == "Buddy says Woof!"
-```
-
-### 7. File Handling
-**Definition:** Reading from and writing to files on your system.
-
-**Example Code (`daily_codes/file_ops.py`):**
-```python
-import os
-
-def write_and_read_file(filename, content):
-    # Write to file
-    with open(filename, 'w') as f:
-        f.write(content)
-
-    # Read from file
-    with open(filename, 'r') as f:
-        read_content = f.read()
-
-    # Clean up (delete file after reading)
-    if os.path.exists(filename):
-        os.remove(filename)
-
-    return read_content
-```
-
-**Test Case (`daily_codes/test_file_ops.py`):**
-```python
-from file_ops import write_and_read_file
-
-def test_write_and_read_file():
-    content = "Learning Python is fun!"
-    filename = "test_temp.txt"
-    assert write_and_read_file(filename, content) == content
-```
-
-### 8. List Comprehensions and Generators
-**Definition:** Concise ways to create lists and iterators.
-
-**Example Code (`daily_codes/advanced_iterables.py`):**
-```python
-def get_squares(numbers):
-    # List comprehension
-    return [x * x for x in numbers]
-```
-
-**Test Case (`daily_codes/test_advanced_iterables.py`):**
-```python
-from advanced_iterables import get_squares
-
-def test_get_squares():
-    assert get_squares([1, 2, 3, 4]) == [1, 4, 9, 16]
+def test_dog():
+    d = Dog("Rex")
+    assert d.speak() == "Rex Barks"
 ```
 
 ---
-*Happy Coding! Start by creating your first file in the `daily_codes/` folder today!*
+
+## 10. Advanced Python Concepts
+
+### Theory
+- **Iterators/Generators:** Classes with `__iter__`/`__next__`, or functions with `yield`.
+- **Decorators:** Functions wrapping functions (e.g. `@my_decorator`).
+- **Type Hinting:** `def add(a: int, b: int) -> int:`.
+
+### Example (`daily_codes/adv.py`)
+```python
+def count_up_to(max_val):
+    count = 1
+    while count <= max_val:
+        yield count
+        count += 1
+```
+
+### Test (`daily_codes/test_adv.py`)
+```python
+from adv import count_up_to
+
+def test_generator():
+    gen = count_up_to(3)
+    assert list(gen) == [1, 2, 3]
+```
+
+---
+
+## 11. Concurrency, Parallelism & Async
+
+### Theory
+- **GIL:** Global Interpreter Lock (restricts multi-threading for CPU tasks).
+- **Threading/Multiprocessing:** Modules for concurrent execution.
+- **AsyncIO:** `async def`, `await` for I/O bound concurrency.
+
+### Example (`daily_codes/async_demo.py`)
+```python
+import asyncio
+
+async def fetch_data():
+    await asyncio.sleep(0.01)
+    return "Data"
+```
+
+### Test (`daily_codes/test_async_demo.py`)
+```python
+import asyncio
+from async_demo import fetch_data
+
+def test_fetch_data():
+    res = asyncio.run(fetch_data())
+    assert res == "Data"
+```
+
+---
+
+## 12. Professional Ecosystem & Tooling
+
+### Theory
+- **Advanced Structures:** `collections.Counter`, `defaultdict`.
+- **Testing/Debugging:** `pytest`, `pdb` (Debugger).
+- **Network:** `requests` library to fetch APIs.
+- **Logging:** `logging` module instead of prints.
+
+### Example (`daily_codes/ecosystem.py`)
+```python
+from collections import Counter
+
+def get_most_common(word_list):
+    return Counter(word_list).most_common(1)[0][0]
+```
+
+### Test (`daily_codes/test_ecosystem.py`)
+```python
+from ecosystem import get_most_common
+
+def test_most_common():
+    assert get_most_common(["apple", "banana", "apple"]) == "apple"
+```
+
+---
+*End of Guide. Start writing code in the `daily_codes/` directory!*
