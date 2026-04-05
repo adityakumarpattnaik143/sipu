@@ -1,0 +1,21 @@
+name: Daily Progress Report
+on:
+  schedule:
+    # Runs at 08:00 AM UTC every day
+    - cron: '0 8 * * *'
+jobs:
+  email_report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          subject: Daily Python Learning Progress Report
+          to: your_email@example.com, brother_email@example.com
+          from: GitHub Actions Bot <your_email@example.com>
+          body: "The daily automated checks have run! Please check the GitHub repository to see the latest code pushes, successful runs, and if any code needs fixing."
