@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import re
 from flask import Flask, render_template_string, request, jsonify
 import markdown
 from ansi2html import Ansi2HTMLConverter
@@ -46,8 +47,9 @@ HTML_TEMPLATE = """
         .controls { padding: 5px 0 15px 0; display: flex; justify-content: space-between; align-items: center; }
         button { padding: 5px 15px; font-size: 14px; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px; }
         button:hover { background-color: #0056b3; }
-        .output-box { height: 150px; background: #000; color: #ddd; font-family: monospace; padding: 10px; overflow-y: auto; border: 1px solid #444; margin-top: 10px; white-space: pre-wrap;}
-        .task-container { display: flex; flex-direction: column; flex: 1; min-height: 200px; }
+        .output-box { height: 150px; background: #000; color: #ddd; font-family: monospace; padding: 10px; overflow-y: auto; border: 1px solid #444; margin-top: 10px; white-space: pre-wrap; display: none; }
+        .output-box.active { display: block; }
+        .task-container { display: flex; flex-direction: column; flex: 1; min-height: 200px; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 15px; }
         .task-container h4 { margin: 5px 0; }
         marquee { background-color: #ffeb3b; color: #000; font-weight: bold; padding: 5px; border-bottom: 1px solid #ccc; position: absolute; top: 0; left: 0; width: 100%; z-index: 2; box-sizing: border-box; }
         .panel-container { display: flex; width: 100%; height: calc(100vh - 32px); margin-top: 32px; }
@@ -64,35 +66,18 @@ HTML_TEMPLATE = """
     <div class="panel right-panel">
         <h3>Interactive Exam Workspace</h3>
 
+        {% for task in tasks %}
         <div class="task-container">
-            <h4>Task 1: reverse_string(text)</h4>
-            <textarea id="code-task1">{{ task1_code }}</textarea>
+            <h4>{{ task.title }}</h4>
+            <textarea id="code-task{{ loop.index }}">{{ task.code }}</textarea>
             <div class="controls">
-                <button onclick="runTests(1, 'reverse_string')">Run Task 1 Tests</button>
+                <button onclick="runTests({{ loop.index }}, '{{ task.func_name }}')">Run {{ task.title }} Tests</button>
+                <span id="status-{{ loop.index }}" style="font-weight: bold; margin-left: 10px;"></span>
             </div>
+            <div class="output-box" id="test-output-{{ loop.index }}"></div>
         </div>
+        {% endhof %}
 
-        <div class="task-container">
-            <h4>Task 2: count_vowels(word)</h4>
-            <textarea id="code-task2">{{ task2_code }}</textarea>
-            <div class="controls">
-                <button onclick="runTests(2, 'count_vowels')">Run Task 2 Tests</button>
-            </div>
-        </div>
-
-        <div class="task-container">
-            <h4>Task 3: calculate_average(numbers)</h4>
-            <textarea id="code-task3">{{ task3_code }}</textarea>
-            <div class="controls">
-                <button onclick="runTests(3, 'calculate_average')">Run Task 3 Tests</button>
-            </div>
-        </div>
-
-        <div style="display:flex; justify-content: space-between; align-items: center;">
-            <h4 style="margin: 0;">Test Output Console</h4>
-            <span id="status" style="font-weight: bold;"></span>
-        </div>
-        <div class="output-box" id="test-output">Test results will appear here...</div>
         </div>
     </div>
 
@@ -124,22 +109,29 @@ HTML_TEMPLATE = """
         });
 
         function runTests(taskNum, keyword) {
-            const code1 = document.getElementById('code-task1').value;
-            const code2 = document.getElementById('code-task2').value;
-            const code3 = document.getElementById('code-task3').value;
-            const outputBox = document.getElementById('test-output');
-            const statusSpan = document.getElementById('status');
+            // Collect all task codes
+            const totalTasks = {{ tasks|length }};
+            const allCode = [];
+            for (let i = 1; i <= totalTasks; i++) {
+                const el = document.getElementById('code-task' + i);
+                if (el) {
+                    allCode.push(el.value);
+                }
+            }
 
+            const outputBox = document.getElementById('test-output-' + taskNum);
+            const statusSpan = document.getElementById('status-' + taskNum);
+
+            outputBox.classList.add('active');
             outputBox.innerText = "Running tests for Task " + taskNum + "...";
-            statusSpan.innerText = "Running Task " + taskNum + "...";
+            statusSpan.innerText = "Running...";
+            statusSpan.style.color = "yellow";
 
             fetch('/run_tests', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    code1: code1,
-                    code2: code2,
-                    code3: code3,
+                    codes: allCode,
                     keyword: keyword
                 })
             })
@@ -147,16 +139,48 @@ HTML_TEMPLATE = """
             .then(data => {
                 outputBox.innerHTML = data.output;
                 statusSpan.innerText = "Tests Completed.";
+                statusSpan.style.color = "lightgreen";
             })
             .catch(err => {
                 outputBox.innerText = "Error running tests: " + err;
                 statusSpan.innerText = "Error!";
+                statusSpan.style.color = "red";
             });
         }
     </script>
 </body>
 </html>
 """
+
+def parse_exam_tasks():
+    tasks = []
+    if not os.path.exists(EXAM_TASKS_PATH):
+        return tasks
+
+    with open(EXAM_TASKS_PATH, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    parts = content.split("def ")
+    task_idx = 1
+    for part in parts[1:]:
+        lines = part.splitlines()
+        if not lines: continue
+
+        first_line = lines[0]
+        func_name_match = re.match(r'^([a-zA-Z0-9_]+)\s*\(', first_line)
+        if func_name_match:
+            func_name = func_name_match.group(1)
+            code_block = "def " + part.rstrip()
+
+            tasks.append({
+                "title": f"Task {task_idx}: {func_name}",
+                "func_name": func_name,
+                "code": code_block
+            })
+            task_idx += 1
+
+    return tasks
+
 
 @app.route('/')
 def index():
@@ -167,26 +191,21 @@ def index():
     else:
         exam_html = "<p>Could not find exam.md</p>"
 
-    task1_code = "def reverse_string(text):\n    pass"
-    task2_code = "def count_vowels(word):\n    pass"
-    task3_code = "def calculate_average(numbers):\n    pass"
+    tasks = parse_exam_tasks()
+    template = HTML_TEMPLATE.replace('{% endhof %}', '{% endfor %}')
 
-    return render_template_string(HTML_TEMPLATE,
+    return render_template_string(template,
         exam_html=exam_html,
-        task1_code=task1_code,
-        task2_code=task2_code,
-        task3_code=task3_code
+        tasks=tasks
     )
 
 @app.route('/run_tests', methods=['POST'])
 def run_tests():
     data = request.json
-    code1 = data.get('code1', '')
-    code2 = data.get('code2', '')
-    code3 = data.get('code3', '')
+    codes = data.get('codes', [])
     keyword = data.get('keyword', '')
 
-    combined_code = f"{code1}\n\n{code2}\n\n{code3}\n"
+    combined_code = "\n\n".join(codes) + "\n"
 
     try:
         with open(EXAM_TASKS_PATH, 'w', encoding='utf-8') as f:
@@ -194,7 +213,6 @@ def run_tests():
     except Exception as e:
         return jsonify({"output": f"Failed to save code: {str(e)}"}), 500
 
-    # Run pytest, targeting only the selected test keyword
     try:
         cmd = [sys.executable, '-m', 'pytest', '--color=yes', EXAM_DIR]
         if keyword:
