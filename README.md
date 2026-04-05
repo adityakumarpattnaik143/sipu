@@ -20,3 +20,9 @@ This repository uses a structured process to ensure that new code is properly re
 5. **Email Notifications**:
    - An email report containing the test results will be automatically sent to the configured team members upon success or failure.
    - There's also a daily progress report sent every day at 8:00 AM UTC.
+
+## Exam Web UI
+To practice and take the exam using a visual web interface:
+1. Install requirements: `pip install -r EXAM/requirements.txt`
+2. Start the web UI: `python EXAM/exam_web.py`
+3. Open the provided localhost URL in your browser to view the instructions, write code, and run tests interactively.
