@@ -5,9 +5,30 @@ Welcome to your Python learning journey! This guide is designed to take you from
 
 ---
 
+## Setup: Running Python on Your Local Machine
+
+Before you can start writing code, you need to set up Python on your local computer.
+
+### Step 1: Install Python
+1. Go to the official Python website: [python.org/downloads](https://www.python.org/downloads/)
+2. Download the latest version for your operating system (Windows, macOS, or Linux).
+3. **Important for Windows Users:** During the installation process, check the box that says **"Add Python to PATH"**. This allows you to run Python from any command prompt.
+
+### Step 2: Verify Installation
+1. Open your terminal or command prompt.
+2. Type `python --version` (or `python3 --version` on macOS/Linux) and press Enter.
+3. You should see the version number printed (e.g., `Python 3.12.3`).
+
+### Step 3: Choose an IDE (Code Editor)
+You need a text editor to write your code. We recommend **Visual Studio Code (VS Code)**.
+1. Download it from [code.visualstudio.com](https://code.visualstudio.com/).
+2. Install the **Python Extension** inside VS Code (search for "Python" by Microsoft in the Extensions tab).
+
+---
+
 ## Basic Knowledge Transfer (KT): Working with this Repository
 
-Before diving into Python, here is how you will write code and test it on your local machine.
+Now that Python is installed, here is how you will write code and test it locally.
 
 ### 1. Repository Structure
 All your daily code practice should be stored in the `daily_codes/` directory of this repository.
@@ -38,8 +59,20 @@ def test_say_hello():
     assert say_hello("Aditya") == "Hello, Aditya!"
 ```
 
-**Running your tests:**
-Open your terminal, navigate to the repository root, and run:
+**Running your Python file directly:**
+Open your terminal, navigate to the `daily_codes/` directory, and run:
+```bash
+python hello.py
+```
+*(Note: Use `python3 hello.py` if you are on macOS or Linux).*
+
+**Running your tests (Important!):**
+We use a testing framework called `pytest` to make sure our code works.
+First, ensure it is installed:
+```bash
+pip install pytest
+```
+Then, navigate to the repository root and run all tests:
 ```bash
 pytest daily_codes/
 ```
@@ -47,6 +80,21 @@ pytest daily_codes/
 ---
 
 ## Part 1: Python Basics
+
+### 0. What is Python?
+**Definition:** Python is a high-level, interpreted programming language known for its readability and simplicity. It uses indentation (spaces) to define code blocks instead of curly braces `{}`.
+
+**Comments in Python:**
+- Use the `#` symbol for single-line comments. These are ignored by the computer but help humans read the code.
+- Example: `# This is a comment`
+
+**Indentation:**
+Python is very strict about spaces. You must use 4 spaces (or 1 Tab) for anything inside a function, loop, or condition.
+```python
+def my_function():
+    # Correct indentation!
+    print("Hello")
+```
 
 ### 1. Variables and Data Types
 **Definition:** Variables are containers for storing data values. Python has various data types like Integers (`int`), Floats (`float`), Strings (`str`), and Booleans (`bool`).
@@ -116,11 +164,43 @@ def test_sum_of_list():
 
 ## Part 2: Intermediate Python
 
-### 4. Lists, Dictionaries, and Sets
+### 3.5 Functions Deep Dive (`*args`, `**kwargs`, Scope)
 **Definition:**
-- **Lists:** Ordered, mutable collections of items.
-- **Dictionaries:** Key-value pairs.
-- **Sets:** Unordered collections of unique items.
+- **Functions:** Reusable blocks of code.
+- **Scope:** Variables created inside a function are "local" (cannot be seen outside).
+- **`*args`:** Allows you to pass a variable number of non-keyword arguments to a function.
+- **`**kwargs`:** Allows you to pass a variable number of keyword arguments (like a dictionary) to a function.
+
+**Example Code (`daily_codes/functions_advanced.py`):**
+```python
+def variable_args_sum(*args):
+    # args is a tuple of all numbers passed
+    return sum(args)
+
+def print_user_info(**kwargs):
+    # kwargs is a dictionary
+    return kwargs.get("name", "Unknown")
+```
+
+**Test Case (`daily_codes/test_functions_advanced.py`):**
+```python
+from functions_advanced import variable_args_sum, print_user_info
+
+def test_variable_args():
+    assert variable_args_sum(1, 2, 3) == 6
+    assert variable_args_sum(10, 20) == 30
+
+def test_kwargs():
+    assert print_user_info(name="Aditya", age=25) == "Aditya"
+    assert print_user_info(age=25) == "Unknown"
+```
+
+### 4. Lists, Tuples, Dictionaries, and Sets
+**Definition:**
+- **Lists:** Ordered, mutable (changeable) collections of items, using square brackets `[]`.
+- **Tuples:** Ordered, **immutable** (cannot be changed) collections, using parentheses `()`. Much faster than lists.
+- **Dictionaries:** Key-value pairs, using curly braces `{}`.
+- **Sets:** Unordered collections of unique items, also using curly braces `{}` but without keys.
 
 **Example Code (`daily_codes/data_structures.py`):**
 ```python
@@ -170,6 +250,37 @@ def test_safe_divide():
 ---
 
 ## Part 3: Advanced Python
+
+### 5.5 Decorators
+**Definition:** A decorator is a function that takes another function and extends the behavior of the latter function without explicitly modifying it. It uses the `@` symbol.
+
+**Example Code (`daily_codes/decorators.py`):**
+```python
+def make_uppercase(func):
+    def wrapper():
+        original_result = func()
+        return original_result.upper()
+    return wrapper
+
+@make_uppercase
+def say_hi():
+    return "hello there"
+```
+
+**Test Case (`daily_codes/test_decorators.py`):**
+```python
+from decorators import say_hi
+
+def test_say_hi():
+    assert say_hi() == "HELLO THERE"
+```
+
+### 5.6 Modules and Packages
+**Definition:**
+- **Module:** Any Python file `.py` containing Python code.
+- **Package:** A directory of Python modules containing an `__init__.py` file. This is how you organize large Python projects.
+
+You can import code from one file to another using `import` or `from ... import ...` (just like we do in our test files!).
 
 ### 6. Object-Oriented Programming (OOP)
 **Definition:** A programming paradigm based on the concept of "objects", which can contain data and code (attributes and methods).
