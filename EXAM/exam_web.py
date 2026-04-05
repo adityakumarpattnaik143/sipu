@@ -22,17 +22,22 @@ HTML_TEMPLATE = """
     <title>Python Zero-Level Exam UI</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; height: 100vh; background-color: #f4f4f9; position: relative; }
-        body::before {
-            content: 'ADITYA KUMAR PATTNAIK';
+        .watermark {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 8rem;
-            color: rgba(0, 0, 0, 0.05);
-            white-space: nowrap;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 9999;
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+        }
+        .watermark span {
+            color: rgba(0, 0, 0, 0.05);
+            font-size: 3rem;
+            padding: 2rem;
+            white-space: nowrap;
+            transform: rotate(-30deg);
         }
         .panel { flex: 1; padding: 20px; overflow-y: auto; box-sizing: border-box; position: relative; z-index: 1; }
         .left-panel { border-right: 2px solid #ddd; background: #fff; }
@@ -42,13 +47,18 @@ HTML_TEMPLATE = """
         button { padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px; }
         button:hover { background-color: #0056b3; }
         .output-box { height: 200px; background: #000; color: #ddd; font-family: monospace; padding: 10px; overflow-y: auto; border: 1px solid #444; margin-top: 10px; white-space: pre-wrap;}
+        marquee { background-color: #ffeb3b; color: #000; font-weight: bold; padding: 5px; border-bottom: 1px solid #ccc; position: absolute; top: 0; left: 0; width: 100%; z-index: 2; box-sizing: border-box; }
+        .panel-container { display: flex; width: 100%; height: calc(100vh - 32px); margin-top: 32px; }
     </style>
 </head>
 <body>
-    <div class="panel left-panel">
-        <h2>Welcome ADITYA KUMAR PATTNAIK!</h2>
-        {{ exam_html | safe }}
-    </div>
+    <div class="watermark" id="watermark-container"></div>
+    <marquee>IMPORTANT NOTICE: This exam is actively monitored. Do not attempt to copy or distribute these materials. Copyright ADITYA KUMAR PATTNAIK.</marquee>
+    <div class="panel-container">
+        <div class="panel left-panel">
+            <h2>Welcome ASHIRBAD PATTNAIK , test by ADITYA</h2>
+            {{ exam_html | safe }}
+        </div>
     <div class="panel right-panel">
         <h3>exam_tasks.py</h3>
         <textarea id="code-editor">{{ current_code }}</textarea>
@@ -57,9 +67,29 @@ HTML_TEMPLATE = """
             <span id="status"></span>
         </div>
         <div class="output-box" id="test-output">Output will appear here...</div>
+        </div>
     </div>
 
     <script>
+        // Generate repeating watermark
+        const wmContainer = document.getElementById('watermark-container');
+        const wmText = "ADITYA KUMAR PATTNAIK";
+        for (let i = 0; i < 100; i++) {
+            const span = document.createElement('span');
+            span.innerText = wmText;
+            wmContainer.appendChild(span);
+        }
+
+        // Intercept copy events to inject watermark
+        document.addEventListener('copy', function(e) {
+            const selection = window.getSelection().toString();
+            if (selection) {
+                const modifiedText = selection + "\\n\\n---\\nCopied from: " + wmText + "'s Exam Platform";
+                e.clipboardData.setData('text/plain', modifiedText);
+                e.preventDefault();
+            }
+        });
+
         function runTests() {
             const code = document.getElementById('code-editor').value;
             const outputBox = document.getElementById('test-output');
