@@ -33,7 +33,7 @@ jobs:
           username: ${{secrets.MAIL_USERNAME}}
           password: ${{secrets.MAIL_PASSWORD}}
           subject: Run Python Code and Tests - Success
-          to: adityakumarpattnaik143@gmail.com, pattnaikashibad4@gmail.com
+          to: adityakumarpattnaik143@gmail.com, pattnaikashirbad4@gmail.com
           from: GitHub Actions Bot <adityakumarpattnaik143@gmail.com>
           body: "The automated tests passed successfully! The latest code has been verified."
       - name: Send mail on failure
