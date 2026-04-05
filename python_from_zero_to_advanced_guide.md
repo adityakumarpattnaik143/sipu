@@ -28,6 +28,10 @@ A complete study guide for learning Python from the very beginning to advanced t
 
 ## What Python Is
 
+Python is fundamentally designed to be readable and easy to understand. Its design philosophy emphasizes code readability with the use of significant indentation. This makes it an ideal first language to learn, while still being extremely powerful enough to drive complex applications at companies like Google, Instagram, and Spotify.
+
+📺 **Recommended Video Tutorial:** [Python Tutorial for Beginners - Full Course in 11 Hours [2020] by Programming with Mosh](https://www.youtube.com/watch?v=_uQrJ0TkZlc)
+
 Python is a **high-level, interpreted, general-purpose programming language**. It is popular because it is:
 
 - easy to read,
@@ -55,6 +59,10 @@ Python reads code line by line and executes it.
 ---
 
 ## How to Start
+
+Starting with Python involves setting up your environment properly. A good environment makes it easier to write, test, and debug code. It is highly recommended to install the official Python distribution from `python.org` and set up an IDE like VS Code or PyCharm, which offer features like autocompletion, syntax highlighting, and debugging tools that will accelerate your learning.
+
+📺 **Recommended Video Tutorial:** [How to Install Python and VS Code by Tech With Tim](https://www.youtube.com/watch?v=WPvGqX-TXP0)
 
 ### 1. Install Python
 
@@ -97,6 +105,10 @@ Type code -> Save file -> Run interpreter -> See result -> Fix errors -> Repeat
 ## Level 0: Basics and Fundamentals
 
 This is the foundation. Do not rush this part.
+
+The basics of Python include understanding how the interpreter processes your code, how memory is allocated for variables, and how basic types operate. Python is dynamically typed, meaning you don't have to declare the type of a variable when you create one. However, it is strongly typed, meaning types are enforced at runtime (e.g., you cannot add a string to an integer without explicit conversion).
+
+📺 **Recommended Video Tutorial:** [Python for Beginners - Full Course by freeCodeCamp.org](https://www.youtube.com/watch?v=rfscVS0vtbw)
 
 ### 1. Syntax and Structure
 
@@ -405,6 +417,10 @@ Used on binary representations.
 
 Control flow decides which instructions run.
 
+Control flow is the heart of programming logic. It allows your code to make decisions and repeat tasks. Internally, loops and conditionals rely on boolean evaluation (Truthiness). Understanding how Python evaluates expressions as True or False is crucial here.
+
+📺 **Recommended Video Tutorial:** [Python If Else, For Loops, While Loops by Programming with Mosh](https://www.youtube.com/watch?v=kqaRSUYmOgI)
+
 ### 1. Conditionals
 
 ```python
@@ -521,6 +537,10 @@ else:
 ## Built-in Data Structures
 
 Python has built-in containers for organizing data.
+
+Data structures are ways to store and organize data efficiently. Understanding whether a data structure is **mutable** (can be changed in place, like lists and dictionaries) or **immutable** (cannot be changed after creation, like strings and tuples) is fundamental. For example, mutability means modifying a list inside a function will affect the original list, while modifying a string will create a new string object.
+
+📺 **Recommended Video Tutorial:** [Python Lists, Tuples, Sets, and Dictionaries by Corey Schafer](https://www.youtube.com/watch?v=W8KRlNvIFAQ)
 
 ### 1. Strings (`str`)
 
@@ -757,6 +777,10 @@ print(a.union(b))
 
 Functions help you reuse code.
 
+Functions are blocks of organized, reusable code that perform a single, related action. They help break our program into smaller and modular chunks. Scope refers to the visibility of variables. Python resolves variable names using the LEGB rule (Local, Enclosing, Global, Built-in), which dictates where Python looks for variable names.
+
+📺 **Recommended Video Tutorial:** [Python Functions | Python Tutorial for Absolute Beginners by CS Dojo](https://www.youtube.com/watch?v=9Os0o3wzS_I)
+
 ### 1. Define a function
 
 ```python
@@ -894,6 +918,10 @@ def add(a, b):
 
 Comprehensions are a short way to build collections.
 
+Comprehensions provide a concise way to create sequences. They are considered more 'Pythonic' and are often faster than using traditional `for` loops because they are optimized internally in C. However, they should be used judiciously; if a comprehension becomes too complex, a regular loop is preferred for readability.
+
+📺 **Recommended Video Tutorial:** [Python List Comprehensions by Corey Schafer](https://www.youtube.com/watch?v=3dt4OGnU5sM)
+
 ### 1. List comprehension
 
 ```python
@@ -939,6 +967,10 @@ for i, (name, mark) in enumerate(zip(names, marks)):
 ---
 
 ## Modules, Packages, and Virtual Environments
+
+As your project grows, you cannot keep all your code in a single file. Modules and packages allow you to organize your code hierarchically. Virtual environments are essential because they allow you to isolate dependencies for different projects, preventing version conflicts between libraries.
+
+📺 **Recommended Video Tutorial:** [Python Virtual Environments - Tutorial by Corey Schafer](https://www.youtube.com/watch?v=N5vscPTWKOk)
 
 ### 1. Modules
 
@@ -1013,6 +1045,10 @@ numpy
 
 ## File Handling and Data Formats
 
+File handling is crucial for reading input data and saving output results. The `with` statement in Python is heavily used in file handling because it ensures that resources are properly cleaned up (files are closed automatically) even if an exception occurs during the file operations.
+
+📺 **Recommended Video Tutorial:** [Python File Objects - Reading and Writing to Files by Corey Schafer](https://www.youtube.com/watch?v=Uh2ebFW8OYM)
+
 ### 1. Basic file operations
 
 ```python
@@ -1079,6 +1115,10 @@ with open("data.csv", "r") as f:
 
 Errors happen. Good programs handle them properly.
 
+Exception handling allows a program to gracefully recover from unexpected events rather than crashing entirely. It is a best practice to catch specific exceptions rather than a general blanket exception (`Exception`), so that you do not accidentally swallow errors that you didn't expect.
+
+📺 **Recommended Video Tutorial:** [Python Tutorial: Exceptions - How to Handle Errors by Corey Schafer](https://www.youtube.com/watch?v=NIWwJbo-9_8)
+
 ### 1. Syntax errors vs exceptions
 
 - **Syntax error**: code is written incorrectly.
@@ -1130,6 +1170,10 @@ assert x > 0, "x must be positive"
 ## Object-Oriented Programming
 
 OOP organizes code using **classes** and **objects**.
+
+Object-Oriented Programming (OOP) allows you to model real-world concepts using code. Classes act as blueprints, while objects are the instances built from those blueprints. Mastering concepts like Inheritance, Encapsulation, and Polymorphism will let you design large-scale applications and understand the architecture of massive frameworks like Django.
+
+📺 **Recommended Video Tutorial:** [Python OOP Tutorial - Object Oriented Programming by Corey Schafer](https://www.youtube.com/watch?v=ZDa-Z5JzLm8)
 
 ### 1. Class and object
 
@@ -1273,6 +1317,10 @@ class Shape(ABC):
 
 ## Advanced Python Concepts
 
+Advanced concepts like generators, decorators, and context managers distinguish beginner Python programmers from experts. Generators provide lazy evaluation (yielding items one by one rather than keeping the whole list in memory), which is incredibly memory efficient for processing massive datasets.
+
+📺 **Recommended Video Tutorial:** [Python Decorators - Dynamically Alter The Functionality Of Your Functions by Corey Schafer](https://www.youtube.com/watch?v=FsAPt_9Bf3U)
+
 ### 1. Iterators
 
 An iterator is an object that remembers where it is in a sequence.
@@ -1394,6 +1442,10 @@ print(re.findall(r"\d+", text))
 
 ## Concurrency, Parallelism, and Async
 
+Concurrency is about dealing with lots of things at once, while parallelism is about doing lots of things at once. Because of Python's Global Interpreter Lock (GIL), true parallelism is achieved via Multiprocessing. Asyncio is a modern way to write concurrent code using the `async` and `await` syntax, highly optimized for I/O bound tasks like web scraping.
+
+📺 **Recommended Video Tutorial:** [Asyncio in Python - Asynchronous Programming by Tech With Tim](https://www.youtube.com/watch?v=t5Bo1nRvAMU)
+
 ### 1. GIL
 
 The Global Interpreter Lock is a Python mechanism that affects CPU-bound threading in standard CPython.
@@ -1444,6 +1496,10 @@ Event loop switches between them
 ---
 
 ## Professional Ecosystem and Tooling
+
+Writing code is only half the battle. Professional software development requires rigorous testing, debugging, and logging. Adopting Test-Driven Development (TDD) ensures your code behaves as expected and gives you confidence to refactor later without breaking things.
+
+📺 **Recommended Video Tutorial:** [Python Tutorial: Unit Testing Your Code with the unittest Module by Corey Schafer](https://www.youtube.com/watch?v=6tNS--WetLI)
 
 ### 1. Advanced data structures
 
