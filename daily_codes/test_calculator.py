@@ -8,7 +8,7 @@ def test_add():
 def test_subtract():
     # This checks if the exact output of subtract(5, 3) is 2
     assert subtract(5, 3) == 2
-    assert subtract(10, 20) == -150
+    assert subtract(10, 20) == -10
     
 def test_multiple():
     assert multiple(2, 3) == 6
