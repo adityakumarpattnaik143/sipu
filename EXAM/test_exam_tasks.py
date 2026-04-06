@@ -212,7 +212,7 @@ def test_list_to_tuple_1():
 def test_tuple_to_list_0():
     assert tuple_to_list((1, 2)) == [1, 2]
 def test_tuple_to_list_1():
-    assert tuple_to_list() == []
+    assert tuple_to_list(()) == []
 
 # --- Tests for Task 23: get_third ---
 def test_get_third_0():
