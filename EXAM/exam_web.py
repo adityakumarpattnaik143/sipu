@@ -52,13 +52,63 @@ HTML_TEMPLATE = """
         .task-container { display: flex; flex-direction: column; flex: 0 0 auto; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 15px; }
         .task-container h4 { margin: 5px 0; }
         marquee { background-color: #ffeb3b; color: #000; font-weight: bold; padding: 5px; border-bottom: 1px solid #ccc; position: absolute; top: 0; left: 0; width: 100%; z-index: 2; box-sizing: border-box; }
-        .panel-container { display: flex; width: 100%; height: calc(100vh - 32px); margin-top: 32px; }
+        .panel-container { display: flex; width: 100%; height: calc(100vh - 32px); margin-top: 32px; filter: blur(5px); pointer-events: none; transition: filter 0.3s; }
+        .panel-container.active { filter: none; pointer-events: auto; }
+
+        #proctor-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.9); color: white;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; font-family: sans-serif; text-align: center;
+        }
+        #proctor-overlay h2 { color: #ffeb3b; }
+        #proctor-overlay p { max-width: 600px; line-height: 1.5; }
+        #start-exam-btn { padding: 15px 30px; font-size: 18px; font-weight: bold; background: #28a745; color: white; border: none; cursor: pointer; border-radius: 5px; margin-top: 20px; }
+        #start-exam-btn:hover { background: #218838; }
+
+        #warning-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(255, 0, 0, 0.95); color: white;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10001; text-align: center;
+        }
+        #warning-overlay h1 { font-size: 3rem; margin-bottom: 10px; }
+        #warning-overlay p { font-size: 1.5rem; max-width: 800px; }
+        #resume-btn { padding: 10px 20px; font-size: 18px; background: white; color: red; border: none; cursor: pointer; border-radius: 5px; margin-top: 20px; font-weight: bold; }
+
+        #disqualified-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: black; color: red;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10002; text-align: center;
+        }
+        #disqualified-overlay h1 { font-size: 4rem; }
     </style>
 </head>
 <body>
+    <div id="proctor-overlay">
+        <h2>Exam Security Requirements</h2>
+        <p>To begin this exam, you must grant access to your <b>Camera, Microphone, and Location</b>. The exam must be taken in <b>Fullscreen Mode</b>.</p>
+        <p>Navigating away from this tab, opening other windows, or exiting fullscreen will result in a warning. <b>After 3 warnings, your exam will be terminated immediately.</b></p>
+        <button id="start-exam-btn">Grant Permissions & Start Exam</button>
+        <p id="proctor-status" style="color: #ff9800; margin-top: 15px;"></p>
+    </div>
+
+    <div id="warning-overlay">
+        <h1>WARNING: TAB SWITCH / MINIMIZE DETECTED</h1>
+        <p>You have navigated away from the exam window or exited fullscreen. This is a violation of exam rules.</p>
+        <p>Warning <span id="warning-count-display"></span> of 3</p>
+        <button id="resume-btn">Acknowledge & Resume</button>
+    </div>
+
+    <div id="disqualified-overlay">
+        <h1>EXAM TERMINATED</h1>
+        <p>You have exceeded the maximum number of warnings. Your session has been locked.</p>
+    </div>
+
     <div class="watermark" id="watermark-container"></div>
     <marquee>IMPORTANT NOTICE: This exam is actively monitored. Do not attempt to copy or distribute these materials. Copyright ADITYA KUMAR PATTNAIK.</marquee>
-    <div class="panel-container">
+    <div class="panel-container" id="main-panel">
         <div class="panel left-panel">
             <h2>Welcome ASHIRBAD PATTNAIK , test by ADITYA</h2>
             {{ exam_html | safe }}
@@ -82,6 +132,92 @@ HTML_TEMPLATE = """
     </div>
 
     <script>
+        let warningCount = 0;
+        let examStarted = false;
+        let isDisqualified = false;
+
+        const proctorOverlay = document.getElementById('proctor-overlay');
+        const mainPanel = document.getElementById('main-panel');
+        const warningOverlay = document.getElementById('warning-overlay');
+        const disqualifiedOverlay = document.getElementById('disqualified-overlay');
+        const statusEl = document.getElementById('proctor-status');
+
+        document.getElementById('start-exam-btn').addEventListener('click', async () => {
+            statusEl.innerText = "Requesting permissions...";
+            try {
+                // Request Camera & Mic
+                await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                statusEl.innerText = "Camera and Microphone access granted. Requesting Location...";
+
+                // Request Location
+                await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                });
+                statusEl.innerText = "Location access granted. Entering Fullscreen...";
+
+                // Request Fullscreen
+                if (document.documentElement.requestFullscreen) {
+                    await document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+                    await document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+                    await document.documentElement.msRequestFullscreen();
+                }
+
+                // If all succeed, start the exam
+                examStarted = true;
+                proctorOverlay.style.display = 'none';
+                mainPanel.classList.add('active');
+
+            } catch (err) {
+                statusEl.innerText = "Error: You must grant Camera, Microphone, Location, and Fullscreen permissions to start.";
+                console.error(err);
+            }
+        });
+
+        function triggerWarning() {
+            if (!examStarted || isDisqualified) return;
+
+            warningCount++;
+            document.getElementById('warning-count-display').innerText = warningCount;
+
+            if (warningCount >= 4) {
+                isDisqualified = true;
+                warningOverlay.style.display = 'none';
+                disqualifiedOverlay.style.display = 'flex';
+                mainPanel.style.display = 'none'; // Completely hide exam
+            } else {
+                warningOverlay.style.display = 'flex';
+            }
+        }
+
+        document.getElementById('resume-btn').addEventListener('click', () => {
+            warningOverlay.style.display = 'none';
+            // Force fullscreen again
+            if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(e => console.log(e));
+            }
+        });
+
+        // Detect Tab Switch / Minimize
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                triggerWarning();
+            }
+        });
+
+        // Detect losing focus (e.g. clicking on another app on a second monitor)
+        window.addEventListener('blur', () => {
+            triggerWarning();
+        });
+
+        // Detect exiting fullscreen
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement && examStarted) {
+                triggerWarning();
+            }
+        });
+
         // Generate repeating watermark
         const wmContainer = document.getElementById('watermark-container');
         const wmText = "ADITYA KUMAR PATTNAIK";
