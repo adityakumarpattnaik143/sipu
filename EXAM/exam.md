@@ -40,6 +40,40 @@ Write a function `calculate_average(numbers)` that takes a list of numerical val
 - `calculate_average([])` should return `0`
 
 ---
+
+## Task 4: Check Even or Odd
+
+**Description:**
+Write a function `is_even(number)` that takes an integer and returns `True` if it's even, and `False` if it's odd.
+
+**Example:**
+- `is_even(4)` should return `True`
+- `is_even(7)` should return `False`
+
+---
+
+## Task 5: Check Palindrome
+
+**Description:**
+Write a function `is_palindrome(word)` that takes a string and returns `True` if the word reads the same forwards and backwards. Ignore case sensitivity if you want, but for this basic level, assume all lowercase input.
+
+**Example:**
+- `is_palindrome("racecar")` should return `True`
+- `is_palindrome("hello")` should return `False`
+
+---
+
+## Task 6: Find Maximum in a List
+
+**Description:**
+Write a function `find_maximum(numbers)` that takes a list of numbers and returns the largest number. If the list is empty, return `None`.
+
+**Example:**
+- `find_maximum([1, 5, 3, 9, 2])` should return `9`
+- `find_maximum([])` should return `None`
+
+---
+*End of Exam. Good luck writing your logic in `exam_tasks.py`!*
 *End of Exam. Good luck writing your logic in `exam_tasks.py`!*
 ## Task 4: Return 42
 

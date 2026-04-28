@@ -7,6 +7,13 @@ def count_vowels(word):
 def calculate_average(numbers):
     pass
 
+def is_even(number):
+    pass
+
+def is_palindrome(word):
+    pass
+
+def find_maximum(numbers):
 def return_42():
     pass
 
