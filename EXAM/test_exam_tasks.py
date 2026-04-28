@@ -1,5 +1,5 @@
 import pytest
-from exam_tasks import reverse_string, count_vowels, calculate_average
+from exam_tasks import reverse_string, count_vowels, calculate_average, is_even, is_palindrome, find_maximum
 
 # --- Tests for Task 1: reverse_string ---
 def test_reverse_string_normal():
@@ -41,3 +41,41 @@ def test_calculate_average_empty():
 
 def test_calculate_average_single_element():
     assert calculate_average([42]) == 42.0
+
+
+# --- Tests for Task 4: is_even ---
+def test_is_even_true():
+    assert is_even(4) is True
+    assert is_even(0) is True
+    assert is_even(-2) is True
+
+def test_is_even_false():
+    assert is_even(7) is False
+    assert is_even(1) is False
+    assert is_even(-3) is False
+
+
+# --- Tests for Task 5: is_palindrome ---
+def test_is_palindrome_true():
+    assert is_palindrome("racecar") is True
+    assert is_palindrome("madam") is True
+    assert is_palindrome("a") is True
+    assert is_palindrome("") is True
+
+def test_is_palindrome_false():
+    assert is_palindrome("hello") is False
+    assert is_palindrome("python") is False
+
+
+# --- Tests for Task 6: find_maximum ---
+def test_find_maximum_normal():
+    assert find_maximum([1, 5, 3, 9, 2]) == 9
+
+def test_find_maximum_negative():
+    assert find_maximum([-5, -1, -10]) == -1
+
+def test_find_maximum_empty():
+    assert find_maximum([]) is None
+
+def test_find_maximum_single_element():
+    assert find_maximum([42]) == 42
