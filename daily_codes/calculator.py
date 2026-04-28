@@ -9,3 +9,6 @@ def subtract(a, b):
 def multiple(a, b):
     """returns the multiplication when b is multiplied from a."""
     return a * b
+
+def div(a, b):
+    return  a/ b

@@ -1,0 +1,10 @@
+ * Serving Flask app 'exam_web'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [06/Apr/2026 16:12:50] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [06/Apr/2026 16:15:56] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [06/Apr/2026 16:17:38] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [06/Apr/2026 16:21:57] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [06/Apr/2026 16:23:16] "GET / HTTP/1.1" 200 -
