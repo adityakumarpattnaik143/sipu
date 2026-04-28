@@ -7,6 +7,25 @@ jobs:
   email_report:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest matplotlib fpdf2
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Generate Report
+        run: python generate_report.py
+
       - name: Send mail
         uses: dawidd6/action-send-mail@v3
         with:
@@ -18,4 +37,5 @@ jobs:
           subject: Daily Python Learning Progress Report
           to: adityakumarpattnaik143@gmail.com, pattnaikashirbad4@gmail.com
           from: GitHub Actions Bot <adityakumarpattnaik143@gmail.com>
-          body: "The daily automated checks have run! Please check the GitHub repository to see the latest code pushes, successful runs, and if any code needs fixing."
+          html_body: file://email_body.html
+          attachments: Ashirbad_Pattnaik_Report.pdf
