@@ -14,6 +14,8 @@ def is_palindrome(word):
     pass
 
 def find_maximum(numbers):
+    pass
+
 def return_42():
     pass
 
