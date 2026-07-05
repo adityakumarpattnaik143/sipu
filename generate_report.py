@@ -6,6 +6,16 @@ from fpdf import FPDF
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 
+MOTIVATIONAL_QUOTES = [
+    "Believe you can and you're halfway there.",
+    "The only way to do great work is to love what you do.",
+    "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+    "Don't watch the clock; do what it does. Keep going.",
+    "The secret of getting ahead is getting started.",
+    "Push yourself, because no one else is going to do it for you.",
+    "Great things never come from comfort zones."
+]
+
 def run_command(command):
     try:
         result = subprocess.run(command, check=True, capture_output=True, text=True)
@@ -41,6 +51,13 @@ def get_git_changes():
     # Deduplicate
     added_files = list(set(added_files))
     changed_files = list(set(changed_files))
+    # Get files added
+    added_files_output = run_command(f'git log --since="{yesterday}" --name-status --pretty=format: | grep "^A" | cut -f2')
+    added_files = list(filter(None, set(added_files_output.split("\n")))) if added_files_output else []
+
+    # Get files modified
+    changed_files_output = run_command(f'git log --since="{yesterday}" --name-status --pretty=format: | grep "^M" | cut -f2')
+    changed_files = list(filter(None, set(changed_files_output.split("\n")))) if changed_files_output else []
 
     return added_files, changed_files
 
@@ -76,14 +93,7 @@ def create_pie_chart(passed, failed, total):
     plt.close()
 
 def generate_pdf(added_files, changed_files, passed, failed, total):
-    quotes = [
-        "Believe you can and you're halfway there.",
-        "The only way to do great work is to love what you do.",
-        "Success is not final, failure is not fatal: it is the courage to continue that counts.",
-        "Don't watch the clock; do what it does. Keep going.",
-        "The secret of getting ahead is getting started."
-    ]
-    quote = random.choice(quotes)
+    quote = random.choice(MOTIVATIONAL_QUOTES)
 
     class PDF(FPDF):
         def header(self):
@@ -156,15 +166,6 @@ def generate_pdf(added_files, changed_files, passed, failed, total):
     pdf.output('report.pdf')
 
 def generate_email_html(added_files, changed_files, passed, failed, total):
-    quotes = [
-        "Believe you can and you're halfway there.",
-        "The only way to do great work is to love what you do.",
-        "Success is not final, failure is not fatal: it is the courage to continue that counts.",
-        "Don't watch the clock; do what it does. Keep going.",
-        "The secret of getting ahead is getting started.",
-        "Push yourself, because no one else is going to do it for you.",
-        "Great things never come from comfort zones."
-    ]
     gifs = [
         "https://media.giphy.com/media/11sBLVxNs7v6WA/giphy.gif",
         "https://media.giphy.com/media/fsQbx1hX7hPBBpIM5b/giphy.gif",
@@ -174,7 +175,7 @@ def generate_email_html(added_files, changed_files, passed, failed, total):
     ]
     emojis = ["💪", "😎", "🚀", "🔥", "🌟", "🎉", "🏆", "🧠"]
 
-    quote = random.choice(quotes)
+    quote = random.choice(MOTIVATIONAL_QUOTES)
     selected_gifs = random.sample(gifs, 2)
     selected_emojis = "".join(random.sample(emojis, 3))
 
@@ -270,14 +271,14 @@ def generate_email_html(added_files, changed_files, passed, failed, total):
             <div class="section">
                 <h3>Files Added ({len(added_files)})</h3>
                 <ul>
-                    {''.join([f"<li>➕ {f}</li>" for f in added_files]) if added_files else "<li>No files added.</li>"}
+                    {''.join(f"<li>➕ {f}</li>" for f in added_files) if added_files else "<li>No files added.</li>"}
                 </ul>
             </div>
 
             <div class="section">
                 <h3>Files Changed ({len(changed_files)})</h3>
                 <ul>
-                    {''.join([f"<li>🔄 {f}</li>" for f in changed_files]) if changed_files else "<li>No files changed.</li>"}
+                    {''.join(f"<li>🔄 {f}</li>" for f in changed_files) if changed_files else "<li>No files changed.</li>"}
                 </ul>
             </div>
 
