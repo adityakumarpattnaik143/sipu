@@ -18,15 +18,39 @@ MOTIVATIONAL_QUOTES = [
 
 def run_command(command):
     try:
-        result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
+        result = subprocess.run(command, check=True, capture_output=True, text=True)
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
-        print(f"Error running command: {command}")
+        cmd_str = " ".join(command) if isinstance(command, list) else command
+        print(f"Error running command: {cmd_str}")
         print(e.stderr)
         return ""
 
 def get_git_changes():
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+
+    log_output = run_command(["git", "log", f"--since={yesterday}", "--name-status", "--pretty=format:"])
+
+    added_files = []
+    changed_files = []
+
+    if log_output:
+        for line in log_output.split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            parts = line.split("\t")
+            if len(parts) >= 2:
+                status = parts[0]
+                file_path = parts[-1]
+                if status.startswith("A"):
+                    added_files.append(file_path)
+                elif status.startswith("M"):
+                    changed_files.append(file_path)
+
+    # Deduplicate
+    added_files = list(set(added_files))
+    changed_files = list(set(changed_files))
     # Get files added
     added_files_output = run_command(f'git log --since="{yesterday}" --name-status --pretty=format: | grep "^A" | cut -f2')
     added_files = list(filter(None, set(added_files_output.split("\n")))) if added_files_output else []
@@ -39,7 +63,7 @@ def get_git_changes():
 
 def get_test_scores():
     # Run pytest and generate json report
-    run_command("pytest --json-report --json-report-file=report.json")
+    run_command(["pytest", "--json-report", "--json-report-file=report.json"])
     try:
         with open("report.json", "r") as f:
             report = json.load(f)
