@@ -26,8 +26,15 @@ Write a function `find_maximum(numbers)` that takes a list of numbers and return
 ### 1. Template (How it looks initially in `exam_tasks.py`):
 ```python
 def find_maximum(numbers):
-    # TODO: Write your logic here
-    pass
+    if not numbers:
+        return None
+
+    max_num = numbers[0]
+    for num in numbers:
+        if num > max_num:
+            max_num = num
+
+    return max_num
 ```
 
 ### 2. The Tests (How it looks in `test_exam_tasks.py` - Do not change this):
