@@ -41,7 +41,7 @@ def run_tests():
     try:
         with open(EXAM_TASKS_PATH, "w") as f:
             f.write(code)
-    except Exception as e:
+    except OSError as e:
         return jsonify({"error": f"Failed to save code: {str(e)}"}), 500
 
     # Determine pytest arguments
