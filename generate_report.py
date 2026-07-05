@@ -257,14 +257,14 @@ def generate_email_html(added_files, changed_files, passed, failed, total):
             <div class="section">
                 <h3>Files Added ({len(added_files)})</h3>
                 <ul>
-                    {''.join([f"<li>➕ {f}</li>" for f in added_files]) if added_files else "<li>No files added.</li>"}
+                    {''.join(f"<li>➕ {f}</li>" for f in added_files) if added_files else "<li>No files added.</li>"}
                 </ul>
             </div>
 
             <div class="section">
                 <h3>Files Changed ({len(changed_files)})</h3>
                 <ul>
-                    {''.join([f"<li>🔄 {f}</li>" for f in changed_files]) if changed_files else "<li>No files changed.</li>"}
+                    {''.join(f"<li>🔄 {f}</li>" for f in changed_files) if changed_files else "<li>No files changed.</li>"}
                 </ul>
             </div>
 
