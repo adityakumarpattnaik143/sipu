@@ -1,3 +1,4 @@
+import pytest
 from daily_codes.calculator import add, subtract, multiple ,div
 
 def test_add():
@@ -17,3 +18,7 @@ def test_multiple():
 def test_div():
     assert div( 10, 5) == 2
     assert div( 15, 3) == 5
+
+def test_div_by_zero():
+    with pytest.raises(ZeroDivisionError):
+        div(10, 0)
