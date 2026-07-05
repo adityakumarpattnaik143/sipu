@@ -1,5 +1,4 @@
 import pytest
-from exam_tasks import reverse_string, count_vowels, calculate_average, is_even, is_palindrome, find_maximum
 from exam_tasks import (
     reverse_string,
     count_vowels,
@@ -17,6 +16,8 @@ from exam_tasks import (
     is_greater,
     is_less,
     is_even,
+    is_palindrome,
+    find_maximum,
     is_odd,
     concat_strings,
     str_to_int,
