@@ -362,7 +362,7 @@ def run_tests():
         )
         output = result.stdout
         if result.stderr:
-            output += "\n" + result.stderr
+            output = "".join([output, "\n", result.stderr])
 
         conv = Ansi2HTMLConverter(inline=True)
         html_output = conv.convert(output, full=False)
