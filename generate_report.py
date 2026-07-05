@@ -19,15 +19,11 @@ def get_git_changes():
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
     # Get files added
     added_files_output = run_command(f'git log --since="{yesterday}" --name-status --pretty=format: | grep "^A" | cut -f2')
-    added_files = [f for f in added_files_output.split("\n") if f] if added_files_output else []
+    added_files = list(filter(None, set(added_files_output.split("\n")))) if added_files_output else []
 
     # Get files modified
     changed_files_output = run_command(f'git log --since="{yesterday}" --name-status --pretty=format: | grep "^M" | cut -f2')
-    changed_files = [f for f in changed_files_output.split("\n") if f] if changed_files_output else []
-
-    # Deduplicate
-    added_files = list(set(added_files))
-    changed_files = list(set(changed_files))
+    changed_files = list(filter(None, set(changed_files_output.split("\n")))) if changed_files_output else []
 
     return added_files, changed_files
 
