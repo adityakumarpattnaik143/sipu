@@ -1,5 +1,5 @@
 def reverse_string(text):
-    pass
+    reverse_string[::-1]
 
 def count_vowels(word):
     pass
